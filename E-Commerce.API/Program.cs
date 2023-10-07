@@ -32,11 +32,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.SuppressModelStateInvalidFilter = true;
 
 });
-// ValidationBehavior'ý pipeline içine ekleyin
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-
-
-
 builder.Services.AddMediatR(typeof(CreateCategoryCommandRequest).Assembly);
 
 var app = builder.Build();

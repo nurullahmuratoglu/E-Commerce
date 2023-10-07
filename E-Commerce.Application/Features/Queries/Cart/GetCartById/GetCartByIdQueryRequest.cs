@@ -11,6 +11,8 @@ namespace E_Commerce.Application.Features.Queries.Cart.GetCartById
 {
     public class GetCartByIdQueryRequest:IRequest<ResponseDto<CartViewDto>>
     {
-        public int CartId { get; set; }
+        public Guid? GuestId { get; set; }
+        public int? UserId  { get; set; }
+
     }
 }

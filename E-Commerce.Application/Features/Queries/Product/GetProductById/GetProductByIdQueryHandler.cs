@@ -20,19 +20,18 @@ namespace E_Commerce.Application.Features.Queries.Product.GetProductById
 
         public async Task<ResponseDto<ProductInfoDto>> Handle(GetProductByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var category = await _context.Categories.Include(x=>x.Products)
-                .Where(c => c.Products.Any(p => p.Id == request.ProductId&& p.IsActive==true))
-                .FirstOrDefaultAsync();
-            if (category == null)
-            {
-                throw new NotFoundException("product id bulunamadı");
-            }
-            var productCategory = category.Products.FirstOrDefault(x=>x.Id==request.ProductId);
+            var product = await _context.Products.Where(x => x.Id == request.ProductId).Include(x => x.Category).FirstOrDefaultAsync();
+            if (product == null) throw new NotFoundException("id bulunamadı");
 
 
-            var productdto=ObjectMapper.Mapper.Map<ProductInfoDto>(productCategory);
-            productdto.CategoryName=category.Name;
-            return ResponseDto<ProductInfoDto>.Success(StatusCodes.Status200OK,productdto);
+
+            if (product.IsActive == false) throw new NotFoundException("ürün yayında değil");
+
+
+
+            var productdto = ObjectMapper.Mapper.Map<ProductInfoDto>(product);
+
+            return ResponseDto<ProductInfoDto>.Success(StatusCodes.Status200OK, productdto);
 
         }
     }

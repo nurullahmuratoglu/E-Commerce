@@ -3,31 +3,34 @@ using FluentValidation;
 
 namespace E_Commerce.Application.Validations.UserValidation
 {
-    public class CreateUserCommandValidator : AbstractValidator<CreateUserCommandRequest>
+    public class UserRegisterCommandValidator : AbstractValidator<UserRegisterCommandRequest>
     {
-        public CreateUserCommandValidator()
+        public UserRegisterCommandValidator()
         {
-            RuleFor(x => x.Email)
-                       .NotEmpty().WithMessage("Email alanı boş olamaz.")
-                       .EmailAddress().WithMessage("Geçersiz email formatı.");
+            RuleFor(request => request.Email)
+                 .NotEmpty().WithMessage("Email alanı boş olamaz.")
+                 .EmailAddress().WithMessage("Geçersiz email formatı.");
 
-            RuleFor(x => x.Password)
+            RuleFor(request => request.Password)
                 .NotEmpty().WithMessage("Şifre alanı boş olamaz.")
                 .MinimumLength(10).WithMessage("Şifre en az 10 karakter olmalıdır.")
                 .Matches("[A-Z]").WithMessage("Şifre en az bir büyük harf içermelidir.")
                 .Matches("[0-9]").WithMessage("Şifre en az bir rakam içermelidir.");
 
-            RuleFor(x => x.ConfirmPassword)
+            RuleFor(request => request.ConfirmPassword)
                 .Equal(x => x.Password).WithMessage("Şifreler uyuşmuyor.");
 
-            RuleFor(x => x.FirstName)
+            RuleFor(request => request.FirstName)
                 .NotEmpty().WithMessage("Ad alanı boş olamaz.");
 
-            RuleFor(x => x.LastName)
+            RuleFor(request => request.LastName)
                 .NotEmpty().WithMessage("Soyad alanı boş olamaz.");
 
-            RuleFor(x => x.City)
+            RuleFor(request => request.City)
                 .NotEmpty().WithMessage("Şehir alanı boş olamaz.");
+
+            RuleFor(request => request.GuestId)
+                .NotEmpty().WithMessage("Bir GuestId ile üye olunuz yapınız");
         }
     }
 }

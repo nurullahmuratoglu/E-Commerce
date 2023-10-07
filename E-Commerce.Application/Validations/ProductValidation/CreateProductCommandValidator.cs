@@ -7,15 +7,15 @@ namespace E_Commerce.Application.Validations.ProductValidation
     {
         public CreateProductCommandValidator()
         {
-            RuleFor(x => x.Name)
-           .NotEmpty().WithMessage("Ürün adı boş olamaz.")
-           .MaximumLength(255).WithMessage("Ürün adı 255 karakteri geçemez.");
+            RuleFor(request => request.Name)
+                .NotEmpty().WithMessage("Ürün adı boş olamaz.")
+                .MaximumLength(255).WithMessage("Ürün adı 255 karakteri geçemez.");
 
-            RuleFor(x => x.Price)
+            RuleFor(request => request.Price)
                 .GreaterThan(0).WithMessage("Ürün fiyatı sıfırdan büyük olmalıdır.");
 
-            RuleFor(x => x.Stock)
-                      .GreaterThanOrEqualTo(0).WithMessage("Ürün stok miktarı negatif olamaz.");
+            RuleFor(request => request.Stock)
+                .GreaterThanOrEqualTo(0).WithMessage("Ürün stok miktarı negatif olamaz.");
         }
     }
 }

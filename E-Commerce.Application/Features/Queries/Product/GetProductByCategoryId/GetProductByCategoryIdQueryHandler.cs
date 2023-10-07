@@ -38,11 +38,6 @@ namespace E_Commerce.Application.Features.Queries.Product.GetProductByCategoryId
 
 
             var mappedProductDtos = ObjectMapper.Mapper.Map<List<ProductInfoDto>>(category.Products);
-
-            // Kategoriyi işlerken kategori adını belirle
-            var categoryName = category.Name;
-
-            mappedProductDtos.ForEach(p => p.CategoryName = categoryName);
             productDtos.AddRange(mappedProductDtos);
 
             var subcategories = await _context.Categories

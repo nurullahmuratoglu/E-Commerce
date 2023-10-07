@@ -5,10 +5,9 @@ namespace E_Commerce.Domain.AggregateModels.CartAggregate
     public class CartItem : BaseEntity
     { 
         public int ProductId { get; private set; }
-
         public string ProductName { get; private set; }
         public decimal ProductPrice { get; private set; }
-        public int ProductStock { get; set; }
+        public int ProductStock { get; private set; }
         public int CartId { get; private set; }
         public Cart Cart { get; private set; }
         public int Quantity { get; private set; }
@@ -28,5 +27,6 @@ namespace E_Commerce.Domain.AggregateModels.CartAggregate
             Quantity = newQuantity;
             
         }
+
     }
 }

@@ -3,7 +3,6 @@ using E_Commerce.Shared.ResponseDtos;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Aggregate = E_Commerce.Domain.AggregateModels.CategoryAndProductAggregate;
-
 namespace E_Commerce.Application.Features.Command.Category.CreateCategory
 {
     public class CreateCategoryCommandHandler : IRequestHandler<CreateCategoryCommandRequest, ResponseDto<NoContentDto>>
@@ -17,12 +16,14 @@ namespace E_Commerce.Application.Features.Command.Category.CreateCategory
 
         public async Task<ResponseDto<NoContentDto>> Handle(CreateCategoryCommandRequest request, CancellationToken cancellationToken)
         {
-            var parentCategory = await _context.Categories.FindAsync(request.ParentCategoryId);
-            var category = new Aggregate.Category(request.Name, request.ParentCategoryId);
-            if (parentCategory == null)
-            {
-                return ResponseDto<NoContentDto>.Fail(StatusCodes.Status400BadRequest, "parrentcategoryıd geçerli değil");
-            }
+            int categoryId = request.ParentCategoryId ?? 1;
+
+            var parentCategory = await _context.Categories.FindAsync(categoryId);
+
+            if (parentCategory == null) return ResponseDto<NoContentDto>.Fail(StatusCodes.Status400BadRequest, "parrentcategoryıd geçerli değil");
+
+
+            var category = new Aggregate.Category(request.Name, categoryId);
 
             parentCategory.AddSubcategory(category);
             _context.Categories.Add(category);

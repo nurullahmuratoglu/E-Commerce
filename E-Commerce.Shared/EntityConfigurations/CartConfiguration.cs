@@ -9,12 +9,7 @@ namespace E_Commerce.Shared.EntityConfigurations
         public void Configure(EntityTypeBuilder<Cart> builder)
         {
             builder
-    .HasMany(c => c.Items).WithOne(ci => ci.Cart).HasForeignKey(ci => ci.CartId).OnDelete(DeleteBehavior.Cascade)
-.OnDelete(DeleteBehavior.Cascade);
-
-
-
-
+    .HasMany(c => c.Items).WithOne(ci => ci.Cart).HasForeignKey(ci => ci.CartId).OnDelete(DeleteBehavior.Cascade);
 
         }
     }

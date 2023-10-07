@@ -4,15 +4,22 @@ namespace E_Commerce.Domain.AggregateModels.CartAggregate
 {
     public class Cart : BaseEntity, IAggegateRoot
     {
-        private readonly List<CartItem> _items = new List<CartItem>();
 
+
+        private readonly List<CartItem> _items = new List<CartItem>();
         public IReadOnlyCollection<CartItem> Items => _items.AsReadOnly();
         public int? UserId { get; private set; }
         public bool IsActive { get; private set; }
+        public Guid? GuestId { get; private set; }
 
         public Cart()
         {
+            
+        }
+        public Cart(Guid guestId)
+        {
             IsActive = true;
+            GuestId = guestId;
         }
 
         public void AddItem(int productId, string productName, decimal productPrice, int productStock, int quantity)
@@ -42,7 +49,7 @@ namespace E_Commerce.Domain.AggregateModels.CartAggregate
         }
         public void UpdateItemQuantity(int productId, int newQuantity)
         {
-            var cartItem = _items.SingleOrDefault(item => item.ProductId == productId);
+            var cartItem = _items.FirstOrDefault(item => item.ProductId == productId);
 
             newQuantity = Math.Min(newQuantity, cartItem.ProductStock);
 
@@ -53,9 +60,10 @@ namespace E_Commerce.Domain.AggregateModels.CartAggregate
             return Items.Sum(item => item.Quantity * item.ProductPrice);
 
         }
-        public void AssignUser(int? userId)
+        public void AssignUser(int userId)
         {
             UserId = userId;
+            GuestId = null;
         }
 
         public void MergeWith(Cart otherCart)

@@ -19,11 +19,7 @@ namespace E_Commerce.Application.Features.Command.Product.CreateProduct
         {
 
             var category = await _context.Categories.FindAsync(request.CategoryId);
-            if (category == null)
-            {
-                throw new NotFoundException("Kategori bulunamadı.");
-            }
-            
+            if (category == null) throw new NotFoundException("Kategori bulunamadı.");
             category.AddProduct(request.Name, request.Price,request.Stock);
             await _context.SaveChangesAsync();
             return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);

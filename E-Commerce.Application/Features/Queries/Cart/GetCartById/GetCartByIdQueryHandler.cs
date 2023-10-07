@@ -20,16 +20,15 @@ namespace E_Commerce.Application.Features.Queries.Cart.GetCartById
 
         public async Task<ResponseDto<CartViewDto>> Handle(GetCartByIdQueryRequest request, CancellationToken cancellationToken)
         {
-            var cart = await _context.Carts.Where(x => x.Id == request.CartId).Include(x => x.Items).FirstOrDefaultAsync();
-            if (cart == null)
-            {
-                throw new NotFoundException("sepet bulunamadı");
+            var cart = await _context.Carts
+                .Where(x => (request.GuestId != null && x.GuestId == request.GuestId) || (request.UserId != null && x.UserId == request.UserId))
+                .Where(x => x.IsActive == true)
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync();
+            if (cart == null) throw new NotFoundException("sepet bulunamadı");
+            if (!_context.Users.Any(x => x.Id == cart.UserId && x.IsActive == true) && request.UserId != null) throw new NotFoundException("kullanıcı aktif değil ");
 
-            }
-            if (cart.IsActive == false) 
-            {
-                throw new NotFoundException("bu sepet aktif değil");
-            }
+
 
             var cartDto = ObjectMapper.Mapper.Map<CartViewDto>(cart);
 

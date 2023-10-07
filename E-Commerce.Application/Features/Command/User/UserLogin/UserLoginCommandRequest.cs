@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace E_Commerce.Application.Features.Command.User.UserAuthentication
 {
-    public class UserAuthQueryRequest : IRequest<ResponseDto<NoContentDto>>
+    public class UserLoginCommandRequest : IRequest<ResponseDto<NoContentDto>>
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public int? VisitorCartId { get; set; }
+        public Guid GuestId { get; set; }
 
     }
 }

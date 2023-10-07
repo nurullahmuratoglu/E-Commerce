@@ -18,17 +18,15 @@ namespace E_Commerce.Application.Features.Command.Cart.UpdateCartProduct
 
         public async Task<ResponseDto<NoContentDto>> Handle(UpdateCartItemCommandRequest request, CancellationToken cancellationToken)
         {
-            var cart = await _context.Carts.Where(x => x.Id == request.CartId&&x.IsActive==true).Include(x => x.Items).FirstOrDefaultAsync();
-            if (cart==null)
-            {
-                throw new NotFoundException("cart bulunamadı");
 
-            }            
-            if (!cart.Items.Any(x => x.ProductId == request.ProductId))
-            {
-                throw new NotFoundException("ürün bulunamadı");
-
-            }
+            var cart = await _context.Carts
+                .Where(x => (request.GuestId != null && x.GuestId == request.GuestId) || (request.UserId != null && x.UserId == request.UserId))
+                .Where(x => x.IsActive == true)
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync();
+            if (cart == null) throw new NotFoundException("sepet bulunamadı");
+            if (!_context.Users.Any(x => x.Id == cart.UserId && x.IsActive == true) && request.UserId != null) throw new NotFoundException("kullanıcı aktif değil ");
+            if (!cart.Items.Any(x=>x.ProductId==request.ProductId)) throw new NotFoundException("ürün bulunamadı");
             cart.UpdateItemQuantity(request.ProductId, request.Quantity);
             await _context.SaveChangesAsync();
             return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);

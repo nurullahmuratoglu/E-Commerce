@@ -18,25 +18,18 @@ namespace E_Commerce.Application.Features.Command.Cart.RemoveCartItem
 
         public async Task<ResponseDto<NoContentDto>> Handle(RemoveCartItemCommandRequest request, CancellationToken cancellationToken)
         {
-
-            var cart = await _context.Carts.Where(x => x.Id == request.CartId&&x.IsActive==true).Include(x => x.Items).FirstOrDefaultAsync();
-            if (cart == null)
-            {
-                throw new NotFoundException("cart id bulunamadı");
-
-            }
+            var cart = await _context.Carts
+                .Where(x => (request.GuestId != null && x.GuestId == request.GuestId) || (request.UserId != null && x.UserId == request.UserId))
+                .Where(x => x.IsActive == true)
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync();
+            if (cart == null) throw new NotFoundException("sepet bulunamadı");
             
-            var cartıtem = cart.Items.FirstOrDefault(x => x.ProductId == request.ProductId);
-            if (cartıtem == null)
-            {
-                throw new NotFoundException("product id bulunamadı");
-            }
-            cart.RemoveItem(request.ProductId);
-            if (cart.Items.Count == 0)
-            {
-                _context.Carts.Remove(cart);
+            if (!_context.Users.Any(x => x.Id == cart.UserId && x.IsActive == true) && request.UserId != null) throw new NotFoundException("kullanıcı aktif değil ");
+            var cartItem = cart.Items.FirstOrDefault(x => x.ProductId == request.ProductId);
+            if (cartItem == null) throw new NotFoundException("product id bulunamadı");
 
-            }
+            cart.RemoveItem(request.ProductId);
             await _context.SaveChangesAsync();
 
             return ResponseDto<NoContentDto>.Success(StatusCodes.Status200OK);

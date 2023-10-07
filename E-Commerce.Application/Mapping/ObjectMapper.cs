@@ -15,7 +15,6 @@ namespace E_Commerce.Application.Mapping
             return config.CreateMapper();
         });
 
-
         public static IMapper Mapper => lazy.Value;
     }
 }

@@ -7,8 +7,8 @@ namespace E_Commerce.Application.Validations.CategoryValidation
     {
         public CreateCategoryCommandValidator()
         {
-            RuleFor(x => x.Name)
-.NotEmpty().WithMessage("Ürün adı boş olamaz.");
+            RuleFor(request => request.Name)
+                .NotEmpty().WithMessage("kategori adı boş olamaz.");
         }
     }
 }

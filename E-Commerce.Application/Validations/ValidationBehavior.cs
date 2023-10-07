@@ -26,8 +26,6 @@ namespace E_Commerce.Application.Validations
             if (validationErrors.Any())
             {
                 var errorMessages = validationErrors.Select(error => error.ErrorMessage).ToList();
-
-
                 throw new ValidationException(errorMessages);
             }
 

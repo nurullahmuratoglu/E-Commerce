@@ -12,16 +12,8 @@ namespace E_Commerce.Application.Mapping
         public CustomMapping()
         {
             CreateMap<Category, CategoryViewDtos>().ReverseMap()
-
            .ForMember(dest => dest.Subcategories, opt => opt.MapFrom(src => src.Subcategories));
 
-
-            CreateMap<ProductInfoDto,Product >()
-
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ProductName))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(dest => dest.Stock, opt => opt.MapFrom(src => src.ProductStock))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.ProductPrice)).ReverseMap();
 
             CreateMap<Cart, CartViewDto>().ReverseMap();
             CreateMap<CartItem, CartItemViewDto>().ReverseMap();

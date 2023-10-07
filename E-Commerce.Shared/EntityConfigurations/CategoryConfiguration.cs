@@ -8,13 +8,13 @@ namespace E_Commerce.Shared.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
-            var baseCategory = Category.SeedData();
+            
 
             builder.HasData(
                 new
                 {
                     Id = 1,
-                    baseCategory.Name,
+                    Name="BaseCategory",
                     ParentCategoryID = (int?)null
 
                 });
